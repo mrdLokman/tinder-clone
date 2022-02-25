@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
     },
     loginText:{
         textAlign:"center",
-        fontWeight:"700"
+        fontWeight:"700",
+        color:"#424242"
     }
 });
 
