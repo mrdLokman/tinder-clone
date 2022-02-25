@@ -1,6 +1,8 @@
 import React from 'react'
-import { View, Text, ProgressBarAndroid, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient';
+import { View, Text, ProgressBarAndroid, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import useAuth from '../hooks/useAuth'
+import { theme, images } from '../constants';
 
 const LoginScreen = () => {
 
@@ -9,25 +11,25 @@ const LoginScreen = () => {
     if(!loading)
         return (
             <View style={styles.container}>
-                <ImageBackground
-                    resizeMode="cover"
-                    source={{ uri: "https://reactjs.org/logo-og.png"}}
-                    style={styles.background}
-                >   
-                    <TouchableOpacity 
-                        style={styles.loginButton}
-                        onPress={signinWithGoogle}
-                    >
-                        <Text style={styles.loginText}>Sign-in with google</Text>
-                    </TouchableOpacity>
-                </ImageBackground>
+                <LinearGradient colors={[theme.primary, theme.secondary]} style={styles.container}>
+                    <View style={styles.content}>
+                        <Image source={images.logo} style={styles.background}/>
+                    
+                        <TouchableOpacity 
+                            style={styles.loginButton}
+                            onPress={signinWithGoogle}
+                        >
+                            <Text style={styles.loginText}>Sign-in with google</Text>
+                        </TouchableOpacity>
+                    </View>
+                </LinearGradient>
             </View>
             
         );
     else
         return(
             <View style={{flex:1, alignItems:'center', justifyContent: 'center'}}>
-                <ProgressBarAndroid/>
+                <ProgressBarAndroid color={theme.primary}/>
             </View>
         );
     
@@ -38,13 +40,16 @@ const styles = StyleSheet.create({
         flex:1,
     },
     background:{
+        width:250,
+        height:250,
+    },
+    content:{
         flex:1,
-        justifyContent: "center"
+        alignItems:"center",
+        justifyContent:"space-around"
     },
     loginButton:{
-        position:"absolute",
         backgroundColor:"white",
-        bottom:120,
         height: 40,
         width:"50%",
         marginHorizontal:"25%",
