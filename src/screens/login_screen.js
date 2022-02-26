@@ -6,7 +6,7 @@ import { theme, images, icons } from '../constants';
 
 const LoginScreen = () => {
 
-    const { signinWithGoogle, loading } = useAuth();
+    const { signinWithGoogle, signinWithFacebook, loading } = useAuth();
 
     if(!loading)
         return (       
@@ -30,7 +30,7 @@ const LoginScreen = () => {
                             <View style={styles.spacer}/>
                             <TouchableOpacity 
                                 style={styles.loginButton}
-                                onPress={()=>console.log("Not implemented yet!")}
+                                onPress={signinWithFacebook}
                             >
                                 <Image source={icons.facebook} style={styles.loginIcon}/>
                                 <Text style={styles.loginText}>Login with facebook</Text>
