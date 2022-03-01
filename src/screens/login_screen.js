@@ -11,7 +11,7 @@ const LoginScreen = () => {
     if(!loading)
         return (       
             <View style={styles.container}>
-                <StatusBar barStyle={theme.statusBarStyle} backgroundColor={'transparent'} translucent={true}/>
+                <StatusBar barStyle={theme.statusBarStyleLogin} backgroundColor={'transparent'} translucent={true}/>
                 <LinearGradient colors={[theme.primary, theme.secondary]} style={styles.container}>
                     <View style={styles.content}>
                         <Image 

@@ -29,6 +29,8 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "facebookAppId":"770754377234439",
+    "facebookDisplayName":"tinder_clone",
     "plugins": [
       [
         "expo-facebook",

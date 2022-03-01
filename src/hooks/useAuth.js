@@ -66,13 +66,14 @@ export const AuthProvider = ({ children }) => {
         await Facebook.initializeAsync(facebookConfig);
 
         await Facebook.logInWithReadPermissionsAsync({
-            permissions: ['public_profile'],
+            permissions: ['public_profile', 'email'],
         }).then( async (result)=>{
             if (result.type === 'success') {
                 console.log("login success");
                 const { token } = result;
-                const credenrial = FacebookAuthProvider.credential(token);
-                await signInWithCredential(auth, credenrial);
+                console.log(token);
+                //const credenrial = FacebookAuthProvider.credential(token);
+                //await signInWithCredential(auth, credenrial);
             } else {
                 console.log("login cancel")
                 return Promise.reject();
