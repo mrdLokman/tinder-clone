@@ -18,6 +18,8 @@ const icons = {
 
 const images = {
     logo: require("../../assets/tinder_logo.png"),
+    logoText: require("../../assets/tinder_logo_text.png"),
+    sadFace: require("../../assets/sad_face_emoji.png"),
 }
 
 export { theme, images, icons };

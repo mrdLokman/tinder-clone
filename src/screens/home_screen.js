@@ -1,16 +1,17 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { View, Text, Button, TouchableOpacity, Image, StyleSheet, StatusBar } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import useAuth from '../hooks/useAuth'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { icons, theme } from '../constants'
+import { icons, theme, images } from '../constants'
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
-import { dummyData } from '../data';
 import Swiper from 'react-native-deck-swiper';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
     const { user, signout } = useAuth();
+    const [profiles, setProfiles] = useState([]);
+    const swiperRef = useRef(null);
 
     return (
         <SafeAreaView style={{flex:1}}>
@@ -24,7 +25,9 @@ const HomeScreen = () => {
                     />
                 </TouchableOpacity>
 
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('ProfileSetup')}
+                >
                     <Image 
                         style={styles.tinderLogo}
                         source={icons.tinder}
@@ -40,12 +43,15 @@ const HomeScreen = () => {
             { /* Swiper */ }
             <View style={styles.swipeSection}>
                 <Swiper
+                    ref={swiperRef}
                     containerStyle={styles.swaipeContainer}
                     stackSize={5}
-                    cards={dummyData}
+                    cards={profiles}
                     cardIndex={0}
                     animateCardOpacity
                     verticalSwipe={false}
+                    onSwipedLeft={()=> console.log("nope")}
+                    onSwipedRight={()=> console.log("like")}
                     overlayLabels={{
                         left:{
                             title: "NOPE",
@@ -66,7 +72,7 @@ const HomeScreen = () => {
                             },
                         },
                     }}
-                    renderCard={(card)=>(
+                    renderCard={(card)=> card? (
                         <View key={card.id} style={styles.cardContainer}>
                             <Image 
                                 source={{uri: card.photoUrl}}
@@ -80,10 +86,45 @@ const HomeScreen = () => {
                                 <Text style={styles.cardAge}>{card.age}</Text>
                             </View>
                         </View>
+                        ):(
+                        <View style={styles.emptyCardContainer}>
+                            <Image 
+                                source={images.sadFace}
+                                style={styles.emptyCardPhoto}
+                            />
+                            <Text style={styles.emptyCardName}>No more profiles!</Text>     
+                        </View>
                     )}
                 />
             </View>
             { /* End Swiper */ }
+
+            { /* Buttons */ }
+            <View style={styles.buttonsSection}>
+                <TouchableOpacity 
+                    style={[styles.swiperButton, styles.nopeButton]}
+                    onPress={()=> swiperRef.current.swipeLeft()}
+                >
+                    <Entypo 
+                        name='cross'
+                        size={24}
+                        color='red'
+                    />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={[styles.swiperButton, styles.likeButton]}
+                    onPress={()=> swiperRef.current.swipeRight()}
+                >
+                    <AntDesign 
+                        name='heart'
+                        size={24}
+                        color='green'
+                    />
+                </TouchableOpacity>
+            </View>
+            { /* End Buttons */ }
+
         </SafeAreaView>
     )
 }
@@ -118,10 +159,24 @@ const styles= StyleSheet.create({
         borderRadius:25,
         position:'relative'
     },
+    emptyCardContainer:{
+        display:'flex',
+        backgroundColor:"white",
+        height:"75%",
+        borderRadius:25,
+        position:'relative',
+        justifyContent:'center',
+        alignItems:'center'
+    },
     cardPhoto:{
         height: "100%",
         width: "100%",
         borderRadius: 25,
+    },
+    emptyCardPhoto:{
+        height: 100,
+        width: 100,
+        marginBottom: 20,
     },
     cardInfoContainer:{
         backgroundColor:'white',
@@ -150,6 +205,11 @@ const styles= StyleSheet.create({
         fontSize:16,
         color: theme.mainText,
     },
+    emptyCardName:{
+        fontWeight:'bold',
+        fontSize:16,
+        color: theme.mainText,
+    },
     cardAge:{
         fontSize:20,
         fontWeight:'bold',
@@ -158,7 +218,27 @@ const styles= StyleSheet.create({
     cardJob:{
         fontSize:16,
         color: theme.secondaryText,
-    }
+    },
+    buttonsSection:{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        marginBottom: 25
+    },
+    swiperButton:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        width:60,
+        height:60,
+        borderRadius:30,
+    },
+    nopeButton:{
+        backgroundColor: '#fed7d7',
+    },
+    likeButton:{
+        backgroundColor: '#c6f6d5',
+    },
 });
 
 export default HomeScreen
