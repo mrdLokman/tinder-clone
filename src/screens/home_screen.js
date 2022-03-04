@@ -52,7 +52,8 @@ const HomeScreen = () => {
                                 ...doc.data()
                             }))
                     );
-                });
+                }
+            );
         }
 
         fetchCards();

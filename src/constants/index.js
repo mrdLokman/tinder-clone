@@ -20,6 +20,7 @@ const images = {
     logo: require("../../assets/tinder_logo.png"),
     logoText: require("../../assets/tinder_logo_text.png"),
     sadFace: require("../../assets/sad_face_emoji.png"),
+    blankProfilePicture: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
 }
 
 export { theme, images, icons };

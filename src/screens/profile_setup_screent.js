@@ -1,22 +1,37 @@
 import React, { useState } from 'react'
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native'
+import { Button, View, Image, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native'
 import { images, theme } from '../constants';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import useAuth from '../hooks/useAuth';
 import { setDoc, doc, serverTimestamp } from '@firebase/firestore';
 import { db } from '../../firebase';
 import { useNavigation } from '@react-navigation/native';
-
+import * as ImagePicker from 'expo-image-picker';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const ProfileSetupScreen = () => {
     const navigation = useNavigation();
     const { user } = useAuth();
 
-    const [pictureUrl, setPictureUrl] = useState(null);
+    const [pictureUrl, setPictureUrl] = useState(images.blankProfilePicture);
     const [job, setJob] = useState(null);
     const [age, setAge] = useState(null);
 
     const formIncomplete = !pictureUrl || !job || !age;
+
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+
+        if (!result.cancelled) {
+            setPictureUrl(result.uri);
+        }
+    };
 
     const updateUserProfile = () => {
         setDoc(doc(db, 'users', user.uid), {
@@ -44,12 +59,13 @@ const ProfileSetupScreen = () => {
             <Text style={styles.welcomeText}>welcome {user.displayName}</Text>
 
             <Text style={styles.stepLabel}>Step 1: The Profile picture</Text>
-            <TextInput
-                style={styles.stepInput}
-                placeholder="Enter a profile picture URL"
-                value={pictureUrl}
-                onChangeText={(text) =>setPictureUrl(text)}
-            />
+            
+            <View style={styles.pickImageContainer}>
+                {pictureUrl && <Image source={{ uri: pictureUrl }} style={{ width: 200, height: 200 }} />}
+                <TouchableOpacity style={styles.pickImageButton} onPress={pickImage}>
+                    <MaterialIcons name="add-photo-alternate" size={24} color='white' />
+                </TouchableOpacity>
+            </View>
 
             <Text style={styles.stepLabel}>Step 2: The Job</Text>
             <TextInput
@@ -122,6 +138,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         color: 'white'
+    },
+    pickImageContainer:{
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#fc8181'
+    },
+    pickImageButton:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 40,
+        height: 40,
+        borderRadius: 20,
     },
 });
 
